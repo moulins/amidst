@@ -26,6 +26,7 @@ import amidst.mojangapi.world.oracle.BiomeDataOracle;
 import amidst.mojangapi.world.oracle.EndIslandOracle;
 import amidst.mojangapi.world.oracle.HeuristicWorldSpawnOracle;
 import amidst.mojangapi.world.oracle.ImmutableWorldSpawnOracle;
+import amidst.mojangapi.world.oracle.RawBiomeDataOracle;
 import amidst.mojangapi.world.oracle.SlimeChunkOracle;
 import amidst.mojangapi.world.oracle.WorldSpawnOracle;
 import amidst.mojangapi.world.player.MovablePlayerList;
@@ -58,7 +59,7 @@ public class WorldBuilder {
 			MinecraftInterface minecraftInterface,
 			Consumer<World> onDisposeWorld,
 			WorldOptions worldOptions) throws MinecraftInterfaceException {
-		BiomeDataOracle biomeDataOracle = new BiomeDataOracle(minecraftInterface);
+		BiomeDataOracle biomeDataOracle = new RawBiomeDataOracle(minecraftInterface);
 		VersionFeatures versionFeatures = DefaultVersionFeatures.create(minecraftInterface.getRecognisedVersion());
 		return create(
 				minecraftInterface,
@@ -88,7 +89,7 @@ public class WorldBuilder {
 				WorldOptions.fromSaveGame(saveGame),
 				movablePlayerList,
 				versionFeatures,
-				new BiomeDataOracle(minecraftInterface),
+				new RawBiomeDataOracle(minecraftInterface),
 				new ImmutableWorldSpawnOracle(saveGame.getWorldSpawn()));
 	}
 
