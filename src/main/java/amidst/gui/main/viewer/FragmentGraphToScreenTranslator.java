@@ -8,6 +8,7 @@ import amidst.documentation.NotThreadSafe;
 import amidst.fragment.Fragment;
 import amidst.fragment.FragmentGraph;
 import amidst.mojangapi.world.coordinates.CoordinatesInWorld;
+import amidst.mojangapi.world.coordinates.Resolution;
 
 @NotThreadSafe
 public class FragmentGraphToScreenTranslator {
@@ -81,8 +82,8 @@ public class FragmentGraphToScreenTranslator {
 		graph.init(coordinates);
 		int xCenterOnScreen = viewerWidth >> 1;
 		int yCenterOnScreen = viewerHeight >> 1;
-		long xFragmentRelative = coordinates.getXRelativeToFragment();
-		long yFragmentRelative = coordinates.getYRelativeToFragment();
+		long xFragmentRelative = coordinates.getXRelativeTo(Resolution.FRAGMENT);
+		long yFragmentRelative = coordinates.getYRelativeTo(Resolution.FRAGMENT);
 		setTopLeftOnScreen(
 				xCenterOnScreen - zoom.worldToScreen(xFragmentRelative),
 				yCenterOnScreen - zoom.worldToScreen(yFragmentRelative));

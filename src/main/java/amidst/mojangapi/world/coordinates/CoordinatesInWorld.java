@@ -6,13 +6,16 @@ import amidst.documentation.Immutable;
 
 @Immutable
 public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
+	
 	public static CoordinatesInWorld tryParse(String coordinates) {
 		String[] parsedCoordinates = coordinates.replaceAll(" ", "").split(",");
 		if (parsedCoordinates.length != 2) {
 			return null;
 		}
 		try {
-			return CoordinatesInWorld.from(Long.parseLong(parsedCoordinates[0]), Long.parseLong(parsedCoordinates[1]));
+			return CoordinatesInWorld.from(
+					Long.parseLong(parsedCoordinates[0]),
+					Long.parseLong(parsedCoordinates[1]));
 		} catch (NumberFormatException e) {
 			return null;
 		}
@@ -22,21 +25,29 @@ public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
 		return new CoordinatesInWorld(xInWorld, yInWorld);
 	}
 
-	public static CoordinatesInWorld from(long xAsResolution, long yAsResolution, Resolution resolution) {
+	public static CoordinatesInWorld from(long xAsResolution,
+			long yAsResolution, Resolution resolution) {
 		return new CoordinatesInWorld(
 				resolution.convertFromThisToWorld(xAsResolution),
 				resolution.convertFromThisToWorld(yAsResolution));
 	}
+	
+	public static CoordinatesInWorld from(CoordinatesInWorld coordAsResolution, Resolution resolution) {
+		return CoordinatesInWorld.from(coordAsResolution.getX(), coordAsResolution.getY(), resolution);
+	}
 
-	private static CoordinatesInWorld from(CoordinatesInWorld base, long deltaXInWorld, long deltaYInWorld) {
-		return new CoordinatesInWorld(base.xInWorld + deltaXInWorld, base.yInWorld + deltaYInWorld);
+	private static CoordinatesInWorld from(CoordinatesInWorld base,
+			long deltaXInWorld, long deltaYInWorld) {
+		return new CoordinatesInWorld(base.xInWorld + deltaXInWorld,
+				base.yInWorld + deltaYInWorld);
 	}
 
 	public static CoordinatesInWorld origin() {
 		return ORIGIN;
 	}
 
-	private static final CoordinatesInWorld ORIGIN = CoordinatesInWorld.from(0, 0);
+	private static final CoordinatesInWorld ORIGIN = CoordinatesInWorld.from(0,
+			0);
 
 	private final long xInWorld;
 	private final long yInWorld;
@@ -61,45 +72,49 @@ public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
 	public long getYAs(Resolution targetResolution) {
 		return targetResolution.convertFromWorldToThis(yInWorld);
 	}
-
-	public long getXCornerOfFragment() {
-		return CoordinateUtils.toFragmentCorner(xInWorld);
+	
+	public CoordinatesInWorld getAs(Resolution targetResolution) {
+		return CoordinatesInWorld.from(getXAs(targetResolution), getYAs(targetResolution));
+	}
+	
+	public long snapXTo(Resolution targetResolution) {
+		return targetResolution.snapToResolution(xInWorld);
+	}
+	
+	public long snapYTo(Resolution targetResolution) {
+		return targetResolution.snapToResolution(yInWorld);
+	}
+	
+	public CoordinatesInWorld snapTo(Resolution targetResolution) {
+		return CoordinatesInWorld.from(snapXTo(targetResolution), snapYTo(targetResolution));
+	}
+	
+	public long snapUpwardsXTo(Resolution targetResolution) {
+		return targetResolution.snapUpwardsToResolution(xInWorld);
+	}
+	
+	public long snapUpwardsYTo(Resolution targetResolution) {
+		return targetResolution.snapUpwardsToResolution(yInWorld);
 	}
 
-	public long getYCornerOfFragment() {
-		return CoordinateUtils.toFragmentCorner(yInWorld);
+	public CoordinatesInWorld snapUpwardsTo(Resolution targetResolution) {
+		return CoordinatesInWorld.from(snapUpwardsXTo(targetResolution), snapUpwardsYTo(targetResolution));
+	}
+	public long getXRelativeTo(Resolution resolution) {
+		return resolution.toRelative(xInWorld);
 	}
 
-	public long getXCornerOfFragmentAs(Resolution targetResolution) {
-		return targetResolution.convertFromWorldToThis(CoordinateUtils.toFragmentCorner(xInWorld));
+	public long getYRelativeTo(Resolution resolution) {
+		return resolution.toRelative(yInWorld);
 	}
-
-	public long getYCornerOfFragmentAs(Resolution targetResolution) {
-		return targetResolution.convertFromWorldToThis(CoordinateUtils.toFragmentCorner(yInWorld));
-	}
-
-	public long getXRelativeToFragment() {
-		return CoordinateUtils.toFragmentRelative(xInWorld);
-	}
-
-	public long getYRelativeToFragment() {
-		return CoordinateUtils.toFragmentRelative(yInWorld);
-	}
-
-	public long getXRelativeToFragmentAs(Resolution targetResolution) {
-		return targetResolution.convertFromWorldToThis(CoordinateUtils.toFragmentRelative(xInWorld));
-	}
-
-	public long getYRelativeToFragmentAs(Resolution targetResolution) {
-		return targetResolution.convertFromWorldToThis(CoordinateUtils.toFragmentRelative(yInWorld));
-	}
-
-	public CoordinatesInWorld toFragmentCorner() {
-		return from(getXCornerOfFragment(), getYCornerOfFragment());
+	
+	public CoordinatesInWorld getRelativeTo(Resolution resolution) {
+		return CoordinatesInWorld.from(getXRelativeTo(resolution), getYRelativeTo(resolution));
 	}
 
 	public double getDistance(CoordinatesInWorld other) {
-		return Point.distance(xInWorld, yInWorld, other.xInWorld, other.yInWorld);
+		return Point.distance(xInWorld, yInWorld, other.xInWorld,
+				other.yInWorld);
 	}
 
 	public double getDistance(long xInWorld, long yInWorld) {
@@ -107,11 +122,13 @@ public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
 	}
 
 	public double getDistanceSq(CoordinatesInWorld other) {
-		return Point.distanceSq(xInWorld, yInWorld, other.xInWorld, other.yInWorld);
+		return Point.distanceSq(xInWorld, yInWorld, other.xInWorld,
+				other.yInWorld);
 	}
 
 	public double getDistanceSq(long xInWorld, long yInWorld) {
-		return Point.distanceSq(this.xInWorld, this.yInWorld, xInWorld, yInWorld);
+		return Point.distanceSq(this.xInWorld, this.yInWorld, xInWorld,
+				yInWorld);
 	}
 
 	public CoordinatesInWorld add(CoordinatesInWorld other) {
@@ -131,7 +148,10 @@ public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
 	}
 
 	public boolean isInBoundsOf(CoordinatesInWorld corner, long size) {
-		return CoordinateUtils.isInBounds(xInWorld, yInWorld, corner.xInWorld, corner.yInWorld, size, size);
+		return xInWorld >= corner.xInWorld
+			&& xInWorld < corner.xInWorld + size
+			&& yInWorld >= corner.yInWorld 
+			&& yInWorld < corner.yInWorld + size;
 	}
 
 	@Override
@@ -155,8 +175,8 @@ public class CoordinatesInWorld implements Comparable<CoordinatesInWorld> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (xInWorld ^ (xInWorld >>> 32));
-		result = prime * result + (int) (yInWorld ^ (yInWorld >>> 32));
+		result = prime * result + Long.hashCode(xInWorld);
+		result = prime * result + Long.hashCode(yInWorld);
 		return result;
 	}
 

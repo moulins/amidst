@@ -29,7 +29,7 @@ public class StructureProducer<T> extends WorldIconProducer<T> {
 			Dimension dimension,
 			boolean displayDimension) {
 		this.resolution = resolution;
-		this.size = resolution.getStepsPerFragment();
+		this.size = resolution.getStepsPer(Resolution.FRAGMENT);
 		this.offsetInWorld = offsetInWorld;
 		this.checker = checker;
 		this.provider = provider;

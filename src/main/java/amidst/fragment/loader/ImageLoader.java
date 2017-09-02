@@ -26,7 +26,7 @@ public class ImageLoader extends FragmentLoader {
 		super(declaration);
 		this.resolution = resolution;
 		this.colorProvider = colorProvider;
-		this.size = resolution.getStepsPerFragment();
+		this.size = resolution.getStepsPer(Resolution.FRAGMENT);
 		this.rgbArray = new int[size * size];
 		this.bufferedImage = createBufferedImage();
 	}
