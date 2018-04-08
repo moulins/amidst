@@ -77,8 +77,8 @@ public class World {
 		this.villageProducer = villageProducer;
 		this.templeProducer = templeProducer;
 		this.mineshaftProducer = mineshaftProducer;
-		this.woodlandMansionProducer = woodlandMansionProducer;
 		this.oceanMonumentProducer = oceanMonumentProducer;
+		this.woodlandMansionProducer = woodlandMansionProducer;
 		this.netherFortressProducer = netherFortressProducer;
 		this.endCityProducer = endCityProducer;
 	}
@@ -101,6 +101,7 @@ public class World {
 			templeProducer,
 			mineshaftProducer,
 			oceanMonumentProducer,
+			woodlandMansionProducer,
 			netherFortressProducer,
 			endCityProducer
 		);
