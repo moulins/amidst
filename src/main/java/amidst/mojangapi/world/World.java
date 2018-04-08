@@ -9,6 +9,7 @@ import amidst.mojangapi.world.coordinates.Region;
 import amidst.mojangapi.world.icon.WorldIcon;
 import amidst.mojangapi.world.icon.producer.CachedWorldIconProducer;
 import amidst.mojangapi.world.icon.producer.SpawnProducer;
+import amidst.mojangapi.world.icon.producer.StaticWorldIconProducer;
 import amidst.mojangapi.world.icon.producer.WorldIconProducer;
 import amidst.mojangapi.world.icon.type.StructureType;
 import amidst.mojangapi.world.oracle.BiomeDataOracle;
@@ -43,6 +44,7 @@ public class World {
 	private final WorldIconProducer<Void> woodlandMansionProducer;
 	private final WorldIconProducer<Void> netherFortressProducer;
 	private final WorldIconProducer<List<EndIsland>> endCityProducer;
+	private final StaticWorldIconProducer specialIconsProducer;
 	
 	public World(
 			Consumer<World> onDisposeWorld,
@@ -62,7 +64,8 @@ public class World {
 			WorldIconProducer<Void> oceanMonumentProducer,
 			WorldIconProducer<Void> woodlandMansionProducer,
 			WorldIconProducer<Void> netherFortressProducer,
-			WorldIconProducer<List<EndIsland>> endCityProducer) {
+			WorldIconProducer<List<EndIsland>> endCityProducer,
+			List<WorldIcon> specialWorldIcons) {
 		this.onDisposeWorld = onDisposeWorld;
 		this.worldOptions = worldOptions;
 		this.movablePlayerList = movablePlayerList;
@@ -82,6 +85,7 @@ public class World {
 		this.woodlandMansionProducer = woodlandMansionProducer;
 		this.netherFortressProducer = netherFortressProducer;
 		this.endCityProducer = endCityProducer;
+		this.specialIconsProducer = new StaticWorldIconProducer(specialWorldIcons);
 	}
 	
 	public World cached() {
@@ -104,7 +108,8 @@ public class World {
 			oceanMonumentProducer,
 			woodlandMansionProducer,
 			netherFortressProducer,
-			endCityProducer
+			endCityProducer,
+			specialIconsProducer.getWorldIcons()
 		);
 		//@formatter: on
 	}
@@ -176,6 +181,10 @@ public class World {
 	public WorldIconProducer<List<EndIsland>> getEndCityProducer() {
 		return endCityProducer;
 	}
+	
+	public WorldIconProducer<Void> getSpecialIconsProducer() {
+		return specialIconsProducer;
+	}
 
 	public WorldIconProducer<Void> getWoodlandMansionProducer() {
 		return woodlandMansionProducer;
@@ -191,6 +200,10 @@ public class World {
 
 	public List<WorldIcon> getPlayerWorldIcons() {
 		return playerProducer.getWorldIcons();
+	}
+	
+	public List<WorldIcon> getSpecialWorldIcons() {
+		return specialIconsProducer.getWorldIcons();
 	}
 
 	public void reloadPlayerWorldIcons() {
