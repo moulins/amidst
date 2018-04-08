@@ -135,4 +135,5 @@ public class WorldSwitcher {
 	public void clearWorld() {
 		clearViewerFacade();
 	}
+
 }

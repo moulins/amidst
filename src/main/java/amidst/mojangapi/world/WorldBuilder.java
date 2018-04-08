@@ -17,7 +17,6 @@ import amidst.mojangapi.world.icon.locationchecker.TempleLocationChecker;
 import amidst.mojangapi.world.icon.locationchecker.VillageLocationChecker;
 import amidst.mojangapi.world.icon.locationchecker.WoodlandMansionLocationChecker;
 import amidst.mojangapi.world.icon.producer.PlayerProducer;
-import amidst.mojangapi.world.icon.producer.SpawnProducer;
 import amidst.mojangapi.world.icon.producer.StructureProducer;
 import amidst.mojangapi.world.icon.type.DefaultWorldIconTypes;
 import amidst.mojangapi.world.icon.type.EndCityWorldIconTypeProvider;
@@ -64,9 +63,7 @@ public class WorldBuilder {
 		return create(
 				minecraftInterface,
 				onDisposeWorld,
-				worldOptions.getWorldSeed(),
-				worldOptions.getWorldType(),
-				worldOptions.getGeneratorOptions(),
+				worldOptions,
 				MovablePlayerList.dummy(),
 				versionFeatures,
 				biomeDataOracle,
@@ -88,9 +85,7 @@ public class WorldBuilder {
 		return create(
 				minecraftInterface,
 				onDisposeWorld,
-				WorldSeed.fromSaveGame(saveGame.getSeed()),
-				saveGame.getWorldType(),
-				saveGame.getGeneratorOptions(),
+				WorldOptions.fromSaveGame(saveGame),
 				movablePlayerList,
 				versionFeatures,
 				new BiomeDataOracle(minecraftInterface),
@@ -100,29 +95,26 @@ public class WorldBuilder {
 	private World create(
 			MinecraftInterface minecraftInterface,
 			Consumer<World> onDisposeWorld,
-			WorldSeed worldSeed,
-			WorldType worldType,
-			String generatorOptions,
+			WorldOptions worldOptions,
 			MovablePlayerList movablePlayerList,
 			VersionFeatures versionFeatures,
 			BiomeDataOracle biomeDataOracle,
 			WorldSpawnOracle worldSpawnOracle) throws MinecraftInterfaceException {
 		RecognisedVersion recognisedVersion = minecraftInterface.getRecognisedVersion();
-		seedHistoryLogger.log(recognisedVersion, worldSeed);
+		WorldSeed worldSeed = worldOptions.getWorldSeed();
 		long seed = worldSeed.getLong();
-		minecraftInterface.createWorld(seed, worldType, generatorOptions);
+		seedHistoryLogger.log(recognisedVersion, worldSeed);
+		minecraftInterface.createWorld(seed, worldOptions.getWorldType(), worldOptions.getGeneratorOptions());
 		return new World(
 				onDisposeWorld,
-				worldSeed,
-				worldType,
-				generatorOptions,
+				worldOptions,
 				movablePlayerList,
 				recognisedVersion,
 				versionFeatures,
 				biomeDataOracle,
 				EndIslandOracle.from(seed),
 				new SlimeChunkOracle(seed),
-				new SpawnProducer(worldSpawnOracle),
+				worldSpawnOracle,
 				versionFeatures.getStrongholdProducerFactory().apply(
 						seed,
 						biomeDataOracle,
