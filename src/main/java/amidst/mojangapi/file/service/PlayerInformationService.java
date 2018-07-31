@@ -125,7 +125,7 @@ public class PlayerInformationService {
 		try {
 			return Optional.of(getPlayerJsonByName(name));
 		} catch (IOException | FormatException | NullPointerException e) {
-			AmidstLogger.warn("unable to load player information by name: " + name);
+			AmidstLogger.warn("unable to load player information by name: {}", name);
 			return Optional.empty();
 		}
 	}
@@ -135,7 +135,7 @@ public class PlayerInformationService {
 		try {
 			return Optional.of(getPlayerJsonByUUID(uuid));
 		} catch (IOException | FormatException | NullPointerException e) {
-			AmidstLogger.warn("unable to load player information by uuid: " + uuid);
+			AmidstLogger.warn("unable to load player information by uuid: {}", uuid);
 			return Optional.empty();
 		}
 	}
@@ -160,7 +160,7 @@ public class PlayerInformationService {
 		try {
 			return Optional.of(WorldIconImage.from(getPlayerHeadByName(name)));
 		} catch (IOException | NullPointerException e) {
-			AmidstLogger.warn("unable to load player head by name: " + name);
+			AmidstLogger.warn("unable to load player head by name: {}", name);
 			return Optional.empty();
 		}
 	}
@@ -170,7 +170,7 @@ public class PlayerInformationService {
 		try {
 			return Optional.of(WorldIconImage.from(getPlayerHeadBySkinUrl(skinUrl)));
 		} catch (IOException | NullPointerException e) {
-			AmidstLogger.warn("unable to load player head by skin url: " + skinUrl);
+			AmidstLogger.warn("unable to load player head by skin url: {}", skinUrl);
 			return Optional.empty();
 		}
 	}

@@ -20,7 +20,9 @@ public enum StructureType {
 	OCEAN_MONUMENT      ("ocean_monument",    "Ocean Monument"),
 	IGLOO               ("igloo",             "Igloo"),
 	MINESHAFT           ("mineshaft",         "Mineshaft"),
-	WOODLAND_MANSION    ("woodland_mansion",  "Woodland Mansion");
+	WOODLAND_MANSION    ("woodland_mansion",  "Woodland Mansion"),
+	OCEAN_RUINS         ("ocean_ruins",       "Ocean Ruins"),
+	SHIPWRECK           ("shipwreck",         "Shipwreck");
 	// @formatter:on
 
 	private static final Map<String, StructureType> typeMap = createTypeMap();

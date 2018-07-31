@@ -131,6 +131,7 @@ public class PerViewerFacadeInjector {
 		this.viewer = new Viewer(viewerMouseListener, drawer);
 		this.viewerFacade = new ViewerFacade(
 				world,
+				fragmentManager,
 				graph,
 				translator,
 				zoom,

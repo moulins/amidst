@@ -42,6 +42,7 @@ public class World {
 	private final WorldIconProducer<Void> mineshaftProducer;
 	private final WorldIconProducer<Void> oceanMonumentProducer;
 	private final WorldIconProducer<Void> woodlandMansionProducer;
+	private final WorldIconProducer<Void> oceanFeaturesProducer;
 	private final WorldIconProducer<Void> netherFortressProducer;
 	private final WorldIconProducer<List<EndIsland>> endCityProducer;
 	private final StaticWorldIconProducer specialIconsProducer;
@@ -63,6 +64,7 @@ public class World {
 			WorldIconProducer<Void> mineshaftProducer,
 			WorldIconProducer<Void> oceanMonumentProducer,
 			WorldIconProducer<Void> woodlandMansionProducer,
+			WorldIconProducer<Void> oceanFeaturesProducer,
 			WorldIconProducer<Void> netherFortressProducer,
 			WorldIconProducer<List<EndIsland>> endCityProducer,
 			List<WorldIcon> specialWorldIcons) {
@@ -83,6 +85,7 @@ public class World {
 		this.mineshaftProducer = mineshaftProducer;
 		this.oceanMonumentProducer = oceanMonumentProducer;
 		this.woodlandMansionProducer = woodlandMansionProducer;
+		this.oceanFeaturesProducer = oceanFeaturesProducer;
 		this.netherFortressProducer = netherFortressProducer;
 		this.endCityProducer = endCityProducer;
 		this.specialIconsProducer = new StaticWorldIconProducer(specialWorldIcons);
@@ -107,6 +110,7 @@ public class World {
 			mineshaftProducer,
 			oceanMonumentProducer,
 			woodlandMansionProducer,
+			oceanFeaturesProducer,
 			netherFortressProducer,
 			endCityProducer,
 			specialIconsProducer.getWorldIcons()
@@ -189,6 +193,10 @@ public class World {
 	public WorldIconProducer<Void> getWoodlandMansionProducer() {
 		return woodlandMansionProducer;
 	}
+	
+	public WorldIconProducer<Void> getOceanFeaturesProducer() {
+		return oceanFeaturesProducer;
+	}
 
 	public WorldIcon getSpawnWorldIcon() {
 		return spawnProducer.getFirstWorldIcon();
@@ -244,7 +252,11 @@ public class World {
 		case JUNGLE:
 		case WITCH:
 			return getTempleProducer();
-		}
+		
+		case OCEAN_RUINS:
+		case SHIPWRECK:
+			return getOceanFeaturesProducer();
+	    }
 		
 		throw new IllegalArgumentException("unexpected structure type");
 	}
